@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard de Seguridad BD</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <h1>📊 Monitor de Anomalías</h1>
+
+        <p>Total de eventos: <strong>{{ total }}</strong></p>
+        <p>Anomalías detectadas: <strong>{{ anomal }}</strong></p>
+
+        <h2>🔧 Administración</h2>
+        <p>
+                <a href="{{ url_for('init_db') }}">Iniciar / Crear tablas en la base de datos</a>
+        </p>
+
+        <h3>Crear usuario de prueba</h3>
+        <form method="post" action="{{ url_for('route_create_user') }}">
+                <label>Usuario: <input name="username" required></label>
+                <label>Contraseña: <input name="password" type="password" required></label>
+                <button type="submit">Crear</button>
+        </form>
+
+        <h3>Comprobar login</h3>
+        <form method="post" action="{{ url_for('route_login_check') }}">
+                <label>Usuario: <input name="login_user" required></label>
+                <label>Contraseña: <input name="login_pass" type="password" required></label>
+                <button type="submit">Probar login</button>
+        </form>
+
+        <h3>Probar entrada (detección básica de inyección)</h3>
+        <form method="post" action="{{ url_for('route_test_input') }}">
+                <label>Usuario (opcional): <input name="tester_user"></label>
+                <label>Entrada: <input name="user_input" style="width:60%"></label>
+                <button type="submit">Enviar</button>
+        </form>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul>
+                {% for category, msg in messages %}
+                    <li><strong>{{ category }}:</strong> {{ msg }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+    <h2>📄 Registros</h2>
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+        <form method="post" action="{{ url_for('save_detections') }}">
+            <button type="submit">A) Guardar detecciones en `app_logs`</button>
+        </form>
+        <a class="button secondary" href="{{ url_for('view_logs') }}">B) Ver `app_logs`</a>
+        <form method="post" action="{{ url_for('train_model') }}">
+            <button type="submit" class="secondary">C) Entrenar modelo (reajustar)</button>
+        </form>
+    </div>
+
+    <table>
+        <tr>
+            <th>PID</th>
+            <th>Usuario</th>
+            <th>IP</th>
+            <th>Estado</th>
+            <th>Inicio</th>
+            <th>Log</th>
+            <th>Anomalía</th>
+        </tr>
+
+        {% for row in table %}
+        <tr class="{% if row.anomaly == -1 %}anomal{% endif %}">
+            <td>{{ row.pid }}</td>
+            <td>{{ row.usename }}</td>
+            <td>{{ row.client_addr }}</td>
+            <td>{{ row.state }}</td>
+            <td>{{ row.query_start }}</td>
+            <td>{{ row.log }}</td>
+            <td>{{ row.anomaly }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</body>
+</html>

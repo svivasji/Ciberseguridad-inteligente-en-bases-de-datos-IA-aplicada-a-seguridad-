@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Historial de app_logs</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>table th, table td {font-size:13px}</style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 Historial de app_logs</h1>
+        <p><a href="{{ url_for('home') }}">← Volver al dashboard</a></p>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Usuario</th>
+                <th>Acción</th>
+                <th>Texto</th>
+                <th>Anómalo</th>
+                <th>Fecha</th>
+            </tr>
+            {% for r in rows %}
+            <tr class="{% if r.is_anomalous %}anomal{% endif %}">
+                <td>{{ r.id }}</td>
+                <td>{{ r.username }}</td>
+                <td>{{ r.action }}</td>
+                <td>{{ r.input_text }}</td>
+                <td>{{ r.is_anomalous }}</td>
+                <td>{{ r.created_at }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>
