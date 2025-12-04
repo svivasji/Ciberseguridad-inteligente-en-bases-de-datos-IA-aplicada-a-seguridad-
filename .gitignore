@@ -109,7 +109,6 @@ desktop.ini
 .env
 .env.*
 secrets.yaml
-config.py
 
 # Model / data artifacts
 /data/*.pkl
