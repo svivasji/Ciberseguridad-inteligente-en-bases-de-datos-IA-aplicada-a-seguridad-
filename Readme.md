@@ -237,17 +237,10 @@ Si quieres que `app_logs` guarde solo anomalías, puedo cambiar `/save_detection
 
 ---
 
-## 7) Seguridad y buenas prácticas
+## 7) Notas
 
-- No subas `config.py` ni artefactos a GitHub. Hay un `.gitignore` preparado.
-- Si `config.py` se subió con credenciales, rota las contraseñas y elimina el archivo del historial:
-
-```powershell
-git rm --cached config.py
-git rm -r --cached data/*.pkl data/*.joblib
-git add .gitignore
-git commit -m "Remove secrets and artifacts from repo"
-```
+- Este es un proyecto de prueba con `config.py` compartido para todos los usuarios.
+- Las credenciales están en `src/config.py` para facilitar la colaboración.
 
 ---
 
@@ -275,8 +268,4 @@ psql -h localhost -U seguser -d seguridad_db -c "SELECT * FROM app_logs ORDER BY
 - Documenta el flujo: extracción (pg_stat_activity) → TF‑IDF → IsolationForest → dashboard.
 - Muestra ejemplos y explica limitaciones.
 - Incluye pasos reproducibles: crear BD, `init_db`, crear usuario, `train`, `save_detections`, `logs`.
-
----
-
-Si quieres que implemente alguna mejora (guardar solo anomalías, vista `/users`, `config_example.py`, etc.) dime la letra (A/B/C) y lo implemento.
 
