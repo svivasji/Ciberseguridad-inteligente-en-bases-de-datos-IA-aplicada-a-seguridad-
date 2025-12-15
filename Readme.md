@@ -1,11 +1,11 @@
-# 🛡️ Proyecto: Ciberseguridad Inteligente en Bases de Datos (IA + PostgreSQL)
+# Proyecto: Ciberseguridad Inteligente en Bases de Datos (IA + PostgreSQL)
 
 Este proyecto analiza la actividad real de PostgreSQL y detecta:
 - accesos sospechosos  
 - consultas anómalas  
 - comportamiento extraño  
 mediante **Machine Learning utilizando Isolation Forest**.
-NOTA: para visualizar el gráfico de anomalías, una vez se ejecute el programa, se deberá abrir en el navegador: http://127.0.0.1:5000/dashboard
+- NOTA: para visualizar el gráfico de anomalías, una vez se ejecute el programa, se deberá abrir en el navegador: http://127.0.0.1:5000/dashboard
 La arquitectura es:
 ```
 PostgreSQL → Extracción → Preprocesado → IA → Detección → Dashboard Web
@@ -95,7 +95,7 @@ Ejecutar:
 GRANT ALL PRIVILEGES ON DATABASE seguridad_db TO seguser;
 ```
 ---
-# 📡 3. Probar la conexión a PostgreSQL
+# 3. Probar la conexión a PostgreSQL
 
 Ejecutar:
 
