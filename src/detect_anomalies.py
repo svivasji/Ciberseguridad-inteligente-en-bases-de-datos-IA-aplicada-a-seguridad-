@@ -5,7 +5,7 @@ from config import MODEL_PATH, VECTORIZER_PATH
 import pandas as pd
 from pathlib import Path
 import traceback
-
+from rule_detector import detect_by_rules
 
 def detectar_anomalias():
 	"""Extrae sesiones, preprocesa logs, ejecuta el modelo y devuelve un DataFrame
@@ -23,7 +23,6 @@ def detectar_anomalias():
 	model_exists = Path(MODEL_PATH).exists()
 	vectorizer_exists = Path(VECTORIZER_PATH).exists()
 
-	# Preferir usar vectorizer guardado si existe (mantiene consistencia de features)
 	if vectorizer_exists:
 		try:
 			pre.load(VECTORIZER_PATH)
@@ -32,7 +31,7 @@ def detectar_anomalias():
 			print("Error cargando vectorizer, volveré a ajustar:", e)
 			traceback.print_exc()
 			X = pre.fit_transform(logs)
-			# guardar nuevo vectorizer
+			# guarda nuevo vectorizer
 			pre.save(VECTORIZER_PATH)
 	else:
 		X = pre.fit_transform(logs)
@@ -53,15 +52,32 @@ def detectar_anomalias():
 		model.train(X)
 		preds = model.predict(X)
 
-	# Usar columna 'anomaly' para compatibilidad con la app web
-	logs_df["anomaly"] = preds
+	logs_df["ml_anomaly"] = preds ==-1
+	rule_anoms = []
+	rules_triggered = []
 
-	# Normalizar nombre de columna para la plantilla web (index.html espera 'log')
+	print("Aplicando reglas SQL...")
+
+	for log in logs:
+		is_rule_anom, rules = detect_by_rules(log)
+		rule_anoms.append(is_rule_anom)
+		rules_triggered.append(", ".join(r["name"] for r in rules))
+
+
+	logs_df["rule_anomaly"] = rule_anoms
+	logs_df["rules_triggered"] = rules_triggered
+	#Decisión final híbrida
+	logs_df["anomaly"] = (logs_df["ml_anomaly"] | logs_df["rule_anomaly"]).map(
+        {True: -1, False: 1}
+    )
+	# Normaliza el nombre de columna para la plantilla web (index.html espera 'log')
 	if "log" not in logs_df.columns and "query" in logs_df.columns:
 		logs_df["log"] = logs_df["query"].astype(str)
 
-	print("Resultados:")
-	print(logs_df)
+	print("Resultados finales:")
+	print(logs_df[
+            ["log", "ml_anomaly", "rule_anomaly", "rules_triggered", "anomaly"]
+        ].head())
 
 	return logs_df
 
