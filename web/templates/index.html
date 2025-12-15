@@ -8,6 +8,7 @@
 <body>
 
     <h1>Monitor de Anomalías</h1>
+   
 
         <p>Total de eventos: <strong>{{ total }}</strong></p>
         <p>Anomalías detectadas: <strong>{{ anomal }}</strong></p>
@@ -50,6 +51,7 @@
 
     <h2>Registros</h2>
     <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+         <p><a class="button" href="{{ url_for('dashboard') }}">Ir al Dashboard de anomalías</a></p>
         <form method="post" action="{{ url_for('save_detections') }}">
             <button type="submit">A) Guardar detecciones en `app_logs`</button>
         </form>

@@ -1,19 +1,26 @@
+<!DOCTYPE html>
 <html lang="es">
-
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard de Anomalías</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
 <body>
-    <h1>Dashboard de Anomalías</h1>
-    {% if graph1 %}
-        <div>
-            {{ graph1 | safe }}
-        </div>
-        <hr>
-        <div>
-            {{ graph2 | safe }}
-        </div>
-    {% else %}
-        <p>No hay datos todavía.</p>
-    {% endif %}
-    <br>
-    <a href="/">⬅ Volver al panel principal</a>
+    <div class="container">
+        <h1>Dashboard de Anomalías</h1>
+        {% if graph1 %}
+            <div>
+                {{ graph1 | safe }}
+            </div>
+            <hr>
+            <div>
+                {{ graph2 | safe }}
+            </div>
+        {% else %}
+            <p>No hay datos todavía.</p>
+        {% endif %}
+        <br>
+        <a class="button" href="/">⬅ Volver al panel principal</a>
+    </div>
 </body>
 </html>
