@@ -7,12 +7,12 @@
 </head>
 <body>
 
-    <h1>📊 Monitor de Anomalías</h1>
+    <h1>Monitor de Anomalías</h1>
 
         <p>Total de eventos: <strong>{{ total }}</strong></p>
         <p>Anomalías detectadas: <strong>{{ anomal }}</strong></p>
 
-        <h2>🔧 Administración</h2>
+        <h2>Administración</h2>
         <p>
                 <a href="{{ url_for('init_db') }}">Iniciar / Crear tablas en la base de datos</a>
         </p>
@@ -48,7 +48,7 @@
             {% endif %}
         {% endwith %}
 
-    <h2>📄 Registros</h2>
+    <h2>Registros</h2>
     <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
         <form method="post" action="{{ url_for('save_detections') }}">
             <button type="submit">A) Guardar detecciones en `app_logs`</button>
@@ -69,7 +69,6 @@
             <th>Log</th>
             <th>Anomalía</th>
         </tr>
-
         {% for row in table %}
         <tr class="{% if row.anomaly == -1 %}anomal{% endif %}">
             <td>{{ row.pid }}</td>
@@ -82,6 +81,5 @@
         </tr>
         {% endfor %}
     </table>
-
 </body>
 </html>

@@ -1,20 +1,22 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
 import sys
 import os
-
 # Permitir importar desde src/
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "src"))
 
+from db_connection import PostgresConnector
 from detect_anomalies import detectar_anomalias  # tu función real
 from auth import create_user, check_login
 from db_setup import create_tables, log_action
 from db_connection import PostgresConnector
-import psycopg2
 from flask import jsonify
 from user_extractor import UserExtractor
 from log_preprocessor import LogPreprocessor
 from anomaly_model import AnomalyModel
 from config import VECTORIZER_PATH, MODEL_PATH
+from flask import Flask, render_template, request, redirect, url_for, flash
+import plotly.express as px
+import pandas as pd
+import psycopg2
 
 app = Flask(__name__)
 app.secret_key = "dev-secret"  # cambiar en producción
@@ -178,6 +180,37 @@ def train_model():
         flash(f'Error entrenando modelo: {e}', 'danger')
     return redirect(url_for('home'))
 
+@app.route("/dashboard")
+def dashboard():
+    db = PostgresConnector()
+    df = db.get_logs_dataframe()
+
+    if df.empty:
+        return render_template("dashboard.html", graph1=None, graph2=None)
+
+    # Convertir timestamp
+    df["timestamp"] = pd.to_datetime(df["created_at"])
+    df["hour"] = df["timestamp"].dt.hour
+
+    # Gráfico 1: anomalías por hora
+    fig1 = px.histogram(
+        df[df["is_anomalous"] == True],
+        x="hour",
+        title="Anomalías por hora"
+    )
+
+    # Gráfico 2: anomalías por usuario
+    fig2 = px.histogram(
+        df[df["is_anomalous"] == True],
+        x="username",
+        title="Anomalías por usuario"
+    )
+
+    return render_template(
+        "dashboard.html",
+        graph1=fig1.to_html(full_html=False),
+        graph2=fig2.to_html(full_html=False)
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)

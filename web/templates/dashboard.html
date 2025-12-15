@@ -1,0 +1,19 @@
+<html lang="es">
+
+<body>
+    <h1>Dashboard de Anomalías</h1>
+    {% if graph1 %}
+        <div>
+            {{ graph1 | safe }}
+        </div>
+        <hr>
+        <div>
+            {{ graph2 | safe }}
+        </div>
+    {% else %}
+        <p>No hay datos todavía.</p>
+    {% endif %}
+    <br>
+    <a href="/">⬅ Volver al panel principal</a>
+</body>
+</html>
