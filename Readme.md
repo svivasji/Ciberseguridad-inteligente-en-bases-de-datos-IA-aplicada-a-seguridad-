@@ -4,17 +4,16 @@ Este proyecto analiza la actividad real de PostgreSQL y detecta:
 - accesos sospechosos  
 - consultas anómalas  
 - comportamiento extraño  
-mediante **Machine Learning (Isolation Forest)**.
-
+mediante **Machine Learning utilizando Isolation Forest**.
+NOTA: para visualizar el gráfico de anomalías, una vez se ejecute el programa, se deberá abrir en el navegador: http://127.0.0.1:5000/dashboard
 La arquitectura es:
-
 ```
 PostgreSQL → Extracción → Preprocesado → IA → Detección → Dashboard Web
 ```
 
 ---
 
-# 🚀 1. Requisitos previos
+# 1. Requisitos previos
 
 - Python 3.8+
 - PostgreSQL 12 o superior
@@ -29,7 +28,7 @@ pip install -r requirements.txt
 
 ---
 
-# 🗄️ 2. CREACIÓN DE LA BASE DE DATOS (pgAdmin o Terminal)
+# 2. CREACIÓN DE LA BASE DE DATOS (pgAdmin o Terminal)
 
 El sistema se conecta a PostgreSQL usando:
 
@@ -45,13 +44,13 @@ DB_CONFIG = {
 
 Por ello debes crear:
 
-### ✔ Base de datos: `seguridad_db`  
-### ✔ Usuario: `seguser`  
-### ✔ Contraseña: `segpass`
+### Base de datos: `seguridad_db`  
+### Usuario: `seguser`  
+### Contraseña: `segpass`
 
 ---
 
-# 🧩 2.1 Crear base de datos desde pgAdmin
+# 2.1 Crear base de datos desde pgAdmin
 
 1. En el panel izquierdo, clic derecho en **Databases**
 2. Seleccionar **Create → Database**
@@ -68,7 +67,7 @@ Pulsar **Save**.
 
 ---
 
-# 🔐 2.2 Crear usuario PostgreSQL (pgAdmin)
+# 2.2 Crear usuario PostgreSQL (pgAdmin)
 
 1. Clic derecho en **Login/Group Roles**
 2. **Create → Login/Group Role**
@@ -89,7 +88,7 @@ Pulsar **Save**.
 ✔ Create DB (opcional)
 Guardar.
 ---
-# 🎁 2.3 Dar permisos al usuario
+# 2.3 Dar permisos al usuario
 Abrir **Query Tool** desde la base `seguridad_db`:
 Ejecutar:
 ```sql
@@ -103,7 +102,7 @@ Ejecutar:
 ```bash
 python src/user_extractor.py
 ```
-# 🛡️ Proyecto: Ciberseguridad Inteligente en Bases de Datos (IA + PostgreSQL)
+# Proyecto: Ciberseguridad Inteligente en Bases de Datos (IA + PostgreSQL)
 
 Este proyecto analiza la actividad real de PostgreSQL y detecta:
 - accesos sospechosos
@@ -238,8 +237,6 @@ Si quieres que `app_logs` guarde solo anomalías, puedo cambiar `/save_detection
 ---
 
 ## 7) Notas
-
-- Este es un proyecto de prueba con `config.py` compartido para todos los usuarios.
 - Las credenciales están en `src/config.py` para facilitar la colaboración.
 
 ---
@@ -263,9 +260,4 @@ psql -h localhost -U seguser -d seguridad_db -c "SELECT * FROM app_logs ORDER BY
 
 ---
 
-## 9) Recomendaciones para entrega / informe
-
-- Documenta el flujo: extracción (pg_stat_activity) → TF‑IDF → IsolationForest → dashboard.
-- Muestra ejemplos y explica limitaciones.
-- Incluye pasos reproducibles: crear BD, `init_db`, crear usuario, `train`, `save_detections`, `logs`.
 
